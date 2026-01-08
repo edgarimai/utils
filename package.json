@@ -1,0 +1,77 @@
+{
+  "name": "@edgarimai/utils",
+  "version": "0.0.1",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./string": {
+      "import": {
+        "types": "./dist/string.d.ts",
+        "default": "./dist/string.mjs"
+      },
+      "require": {
+        "types": "./dist/string.d.cts",
+        "default": "./dist/string.cjs"
+      }
+    },
+    "./number": {
+      "import": {
+        "types": "./dist/number.d.ts",
+        "default": "./dist/number.mjs"
+      },
+      "require": {
+        "types": "./dist/number.d.cts",
+        "default": "./dist/number.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage"
+  },
+  "keywords": [
+    "utils",
+    "utilities",
+    "helpers",
+    "string",
+    "number",
+    "typescript",
+    "tree-shaking"
+  ],
+  "author": "edgarimai",
+  "license": "MIT",
+  "type": "module",
+  "description": "A lightweight, tree-shakeable utility library for TypeScript and JavaScript",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edgarimai/utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/edgarimai/utils/issues"
+  },
+  "homepage": "https://github.com/edgarimai/utils#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16"
+  }
+}
