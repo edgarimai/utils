@@ -1,6 +1,6 @@
 # @edgarimai/utils
 
-A lightweight, tree-shakeable utility library for TypeScript and JavaScript. Simple, well-tested utilities for common tasks like string manipulation, number operations, array transformations, and more.
+A lightweight, tree-shakeable utility library for TypeScript and JavaScript. Simple, well-tested utilities for common tasks like string manipulation, number operations, array transformations, object operations, and more.
 
 ## Features
 
@@ -40,6 +40,9 @@ import { clamp, round } from '@edgarimai/utils/number';
 
 // Import only array utilities
 import { unique, chunk } from '@edgarimai/utils/array';
+
+// Import only object utilities
+import { pick, merge } from '@edgarimai/utils/object';
 ```
 
 ### Option 2: Main Entry (Convenience)
@@ -526,16 +529,166 @@ max([-3, -1, -4]); // -1
 max([]); // undefined
 ```
 
+### Object Utilities
+
+#### `pick<T, K>(obj: T, keys: K[]): Pick<T, K>`
+
+Selects only the specified keys from an object.
+
+```typescript
+import { pick } from '@edgarimai/utils/object';
+
+pick({ a: 1, b: 2, c: 3 }, ['a', 'c']); // { a: 1, c: 3 }
+pick({ name: 'John', age: 30, email: 'john@example.com' }, ['name', 'email']); 
+// { name: 'John', email: 'john@example.com' }
+```
+
+#### `omit<T, K>(obj: T, keys: K[]): Omit<T, K>`
+
+Removes the specified keys from an object.
+
+```typescript
+import { omit } from '@edgarimai/utils/object';
+
+omit({ a: 1, b: 2, c: 3 }, ['b']); // { a: 1, c: 3 }
+omit({ name: 'John', password: 'secret', email: 'john@example.com' }, ['password']); 
+// { name: 'John', email: 'john@example.com' }
+```
+
+#### `merge<T>(target: T, ...sources: Partial<T>[]): T`
+
+Deep merges multiple objects into a target object.
+
+```typescript
+import { merge } from '@edgarimai/utils/object';
+
+merge({ a: 1 }, { b: 2 }, { c: 3 }); // { a: 1, b: 2, c: 3 }
+merge({ a: { b: 1 } }, { a: { c: 2 } }); // { a: { b: 1, c: 2 } }
+merge({ user: { name: 'John' } }, { user: { age: 30 } }); 
+// { user: { name: 'John', age: 30 } }
+```
+
+#### `clone<T>(obj: T): T`
+
+Deep clones an object.
+
+```typescript
+import { clone } from '@edgarimai/utils/object';
+
+const original = { a: { b: 1 } };
+const cloned = clone(original);
+cloned.a.b = 2;
+console.log(original.a.b); // 1 (unchanged)
+```
+
+#### `get<T>(obj: any, path: string | string[], defaultValue?: T): T`
+
+Gets a value from an object by path with optional default value.
+
+```typescript
+import { get } from '@edgarimai/utils/object';
+
+get({ a: { b: 1 } }, 'a.b'); // 1
+get({ a: { b: 1 } }, ['a', 'b']); // 1
+get({ a: {} }, 'a.b.c', 'default'); // 'default'
+get({ user: { profile: { name: 'John' } } }, 'user.profile.name'); // 'John'
+```
+
+#### `set<T>(obj: T, path: string | string[], value: any): T`
+
+Sets a value in an object by path (returns new object).
+
+```typescript
+import { set } from '@edgarimai/utils/object';
+
+set({}, 'a.b.c', 1); // { a: { b: { c: 1 } } }
+set({ a: { b: 1 } }, 'a.c', 2); // { a: { b: 1, c: 2 } }
+set({}, ['user', 'profile', 'name'], 'John'); 
+// { user: { profile: { name: 'John' } } }
+```
+
+#### `isEmpty(obj: object): boolean`
+
+Checks if an object is empty.
+
+```typescript
+import { isEmpty } from '@edgarimai/utils/object';
+
+isEmpty({}); // true
+isEmpty({ a: 1 }); // false
+isEmpty([]); // true
+isEmpty([1, 2]); // false
+```
+
+#### `isEqual(obj1: any, obj2: any): boolean`
+
+Deep compares two objects for equality.
+
+```typescript
+import { isEqual } from '@edgarimai/utils/object';
+
+isEqual({ a: 1, b: 2 }, { a: 1, b: 2 }); // true
+isEqual({ a: 1 }, { a: 2 }); // false
+isEqual({ a: { b: 1 } }, { a: { b: 1 } }); // true (deep comparison)
+isEqual([1, 2, 3], [1, 2, 3]); // true
+```
+
+#### `mapValues<T, R>(obj: T, fn: (value, key) => R): Record<keyof T, R>`
+
+Transforms the values of an object.
+
+```typescript
+import { mapValues } from '@edgarimai/utils/object';
+
+mapValues({ a: 1, b: 2 }, val => val * 2); // { a: 2, b: 4 }
+mapValues({ a: 1, b: 2 }, (val, key) => `${key}-${val}`); 
+// { a: 'a-1', b: 'b-2' }
+```
+
+#### `keys<T>(obj: T): (keyof T)[]`
+
+Returns the keys of an object (type-safe version of Object.keys).
+
+```typescript
+import { keys } from '@edgarimai/utils/object';
+
+keys({ a: 1, b: 2 }); // ['a', 'b']
+// Type-safe: returned keys are typed as 'a' | 'b'
+```
+
+#### `values<T>(obj: T): T[keyof T][]`
+
+Returns the values of an object (type-safe version of Object.values).
+
+```typescript
+import { values } from '@edgarimai/utils/object';
+
+values({ a: 1, b: 2 }); // [1, 2]
+values({ name: 'John', age: 30 }); // ['John', 30]
+```
+
+#### `entries<T>(obj: T): [keyof T, T[keyof T]][]`
+
+Returns the entries of an object (type-safe version of Object.entries).
+
+```typescript
+import { entries } from '@edgarimai/utils/object';
+
+entries({ a: 1, b: 2 }); // [['a', 1], ['b', 2]]
+// Type-safe: keys and values are properly typed
+```
+
 ## TypeScript Support
 
 This package is written in TypeScript and includes type definitions out of the box. No need to install separate `@types` packages.
 
 ```typescript
-import { capitalize, clamp, unique } from '@edgarimai/utils';
+import { capitalize, clamp, unique, pick } from '@edgarimai/utils';
 
 const name: string = capitalize('john'); // Type-safe
 const value: number = clamp(10, 0, 5); // Type-safe
 const arr: number[] = unique([1, 2, 2, 3]); // Type-safe
+const obj = pick({ a: 1, b: 2 }, ['a']); // Type-safe: { a: number }
 ```
 
 ## Tree-shaking Benefits
@@ -551,6 +704,9 @@ import { clamp, round } from '@edgarimai/utils/number';
 
 // ✅ Only includes unique and chunk
 import { unique, chunk } from '@edgarimai/utils/array';
+
+// ✅ Only includes pick and merge
+import { pick, merge } from '@edgarimai/utils/object';
 ```
 
 This results in smaller bundle sizes for your application.

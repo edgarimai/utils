@@ -45,3 +45,18 @@ export {
   min,
   max,
 } from './array.js';
+
+export {
+  pick,
+  omit,
+  merge,
+  clone,
+  get,
+  set,
+  isEmpty,
+  isEqual,
+  mapValues,
+  keys,
+  values,
+  entries,
+} from './object.js';
