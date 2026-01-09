@@ -24,3 +24,24 @@ export {
   sum,
   average,
 } from './number.js';
+
+export {
+  unique,
+  flatten,
+  chunk,
+  take,
+  drop,
+  shuffle,
+  sample,
+  intersection,
+  difference,
+  groupBy,
+  countBy,
+  sortBy,
+  partition,
+  zip,
+  compact,
+  takeLast,
+  min,
+  max,
+} from './array.js';

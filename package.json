@@ -34,6 +34,16 @@
         "types": "./dist/number.d.cts",
         "default": "./dist/number.cjs"
       }
+    },
+    "./array": {
+      "import": {
+        "types": "./dist/array.d.ts",
+        "default": "./dist/array.mjs"
+      },
+      "require": {
+        "types": "./dist/array.d.cts",
+        "default": "./dist/array.cjs"
+      }
     }
   },
   "files": [
@@ -51,6 +61,7 @@
     "helpers",
     "string",
     "number",
+    "array",
     "typescript",
     "tree-shaking"
   ],

@@ -1,6 +1,6 @@
 # @edgarimai/utils
 
-A lightweight, tree-shakeable utility library for TypeScript and JavaScript. Simple, well-tested utilities for common tasks like string manipulation, number operations, and more.
+A lightweight, tree-shakeable utility library for TypeScript and JavaScript. Simple, well-tested utilities for common tasks like string manipulation, number operations, array transformations, and more.
 
 ## Features
 
@@ -37,6 +37,9 @@ import { capitalize, slugify } from '@edgarimai/utils/string';
 
 // Import only number utilities
 import { clamp, round } from '@edgarimai/utils/number';
+
+// Import only array utilities
+import { unique, chunk } from '@edgarimai/utils/array';
 ```
 
 ### Option 2: Main Entry (Convenience)
@@ -310,15 +313,229 @@ average([1, -1, 2, -2]); // 0
 average([]); // 0
 ```
 
+### Array Utilities
+
+#### `unique<T>(arr: T[]): T[]`
+
+Removes duplicate values from an array.
+
+```typescript
+import { unique } from '@edgarimai/utils/array';
+
+unique([1, 2, 2, 3, 3, 4]); // [1, 2, 3, 4]
+unique(['a', 'b', 'b', 'c']); // ['a', 'b', 'c']
+```
+
+#### `flatten<T>(arr: any[], depth?: number): T[]`
+
+Flattens an array to a specified depth (default: 1).
+
+```typescript
+import { flatten } from '@edgarimai/utils/array';
+
+flatten([[1, 2], [3, 4]]); // [1, 2, 3, 4]
+flatten([[[1, 2]], [[3, 4]]], 2); // [1, 2, 3, 4]
+```
+
+#### `chunk<T>(arr: T[], size: number): T[][]`
+
+Chunks an array into smaller arrays of a specified size.
+
+```typescript
+import { chunk } from '@edgarimai/utils/array';
+
+chunk([1, 2, 3, 4, 5], 2); // [[1, 2], [3, 4], [5]]
+chunk([1, 2, 3, 4], 2); // [[1, 2], [3, 4]]
+```
+
+#### `take<T>(arr: T[], n?: number): T[]`
+
+Returns the first n elements of an array (default: 1).
+
+```typescript
+import { take } from '@edgarimai/utils/array';
+
+take([1, 2, 3, 4], 2); // [1, 2]
+take([1, 2, 3]); // [1]
+```
+
+#### `drop<T>(arr: T[], n?: number): T[]`
+
+Returns all elements except the first n (default: 1).
+
+```typescript
+import { drop } from '@edgarimai/utils/array';
+
+drop([1, 2, 3, 4], 2); // [3, 4]
+drop([1, 2, 3]); // [2, 3]
+```
+
+#### `takeLast<T>(arr: T[], n?: number): T[]`
+
+Returns the last n elements of an array (default: 1).
+
+```typescript
+import { takeLast } from '@edgarimai/utils/array';
+
+takeLast([1, 2, 3, 4], 2); // [3, 4]
+takeLast([1, 2, 3]); // [3]
+```
+
+#### `shuffle<T>(arr: T[]): T[]`
+
+Shuffles an array randomly.
+
+```typescript
+import { shuffle } from '@edgarimai/utils/array';
+
+shuffle([1, 2, 3, 4]); // [3, 1, 4, 2] (random order)
+```
+
+#### `sample<T>(arr: T[]): T | undefined`
+
+Returns a random element from an array.
+
+```typescript
+import { sample } from '@edgarimai/utils/array';
+
+sample([1, 2, 3, 4]); // 3 (random element)
+sample([]); // undefined
+```
+
+#### `intersection<T>(arr1: T[], arr2: T[]): T[]`
+
+Returns the intersection of two arrays (common elements).
+
+```typescript
+import { intersection } from '@edgarimai/utils/array';
+
+intersection([1, 2, 3], [2, 3, 4]); // [2, 3]
+intersection([1, 2], [3, 4]); // []
+```
+
+#### `difference<T>(arr1: T[], arr2: T[]): T[]`
+
+Returns the difference between two arrays (elements in arr1 but not in arr2).
+
+```typescript
+import { difference } from '@edgarimai/utils/array';
+
+difference([1, 2, 3], [2, 3, 4]); // [1]
+difference([1, 2], [1, 2, 3]); // []
+```
+
+#### `groupBy<T>(arr: T[], fn: (item: T) => string | number): Record<string | number, T[]>`
+
+Groups array elements by a key function.
+
+```typescript
+import { groupBy } from '@edgarimai/utils/array';
+
+const users = [
+  { name: 'John', age: 20 },
+  { name: 'Jane', age: 30 },
+  { name: 'Bob', age: 20 }
+];
+
+groupBy(users, user => user.age);
+// { 20: [{ name: 'John', age: 20 }, { name: 'Bob', age: 20 }], 30: [{ name: 'Jane', age: 30 }] }
+```
+
+#### `countBy<T>(arr: T[]): Record<T, number>`
+
+Counts occurrences of each element in an array.
+
+```typescript
+import { countBy } from '@edgarimai/utils/array';
+
+countBy([1, 2, 2, 3, 3, 3]); // { 1: 1, 2: 2, 3: 3 }
+countBy(['a', 'b', 'b', 'c', 'c', 'c']); // { a: 1, b: 2, c: 3 }
+```
+
+#### `sortBy<T>(arr: T[], fn: (item: T) => number | string, order?: 'asc' | 'desc'): T[]`
+
+Sorts an array by a key function (default order: 'asc').
+
+```typescript
+import { sortBy } from '@edgarimai/utils/array';
+
+const users = [
+  { name: 'John', age: 30 },
+  { name: 'Jane', age: 20 },
+  { name: 'Bob', age: 25 }
+];
+
+sortBy(users, user => user.age); // Sorted by age ascending
+sortBy(users, user => user.age, 'desc'); // Sorted by age descending
+```
+
+#### `partition<T>(arr: T[], predicate: (item: T) => boolean): [T[], T[]]`
+
+Partitions an array into two arrays based on a predicate.
+
+```typescript
+import { partition } from '@edgarimai/utils/array';
+
+partition([1, 2, 3, 4], n => n % 2 === 0); // [[2, 4], [1, 3]]
+partition([1, 2, 3, 4], n => n > 2); // [[3, 4], [1, 2]]
+```
+
+#### `zip<T>(...arrays: T[][]): T[][]`
+
+Zips multiple arrays together.
+
+```typescript
+import { zip } from '@edgarimai/utils/array';
+
+zip([1, 2], ['a', 'b']); // [[1, 'a'], [2, 'b']]
+zip([1, 2, 3], ['a', 'b']); // [[1, 'a'], [2, 'b']]
+```
+
+#### `compact<T>(arr: T[]): NonNullable<T>[]`
+
+Compacts an array by removing falsy values.
+
+```typescript
+import { compact } from '@edgarimai/utils/array';
+
+compact([0, 1, false, 2, '', 3, null, undefined]); // [1, 2, 3]
+compact([1, 2, 3]); // [1, 2, 3]
+```
+
+#### `min(arr: number[]): number | undefined`
+
+Finds the minimum value in an array.
+
+```typescript
+import { min } from '@edgarimai/utils/array';
+
+min([3, 1, 4, 1, 5]); // 1
+min([3, -1, 4]); // -1
+min([]); // undefined
+```
+
+#### `max(arr: number[]): number | undefined`
+
+Finds the maximum value in an array.
+
+```typescript
+import { max } from '@edgarimai/utils/array';
+
+max([3, 1, 4, 1, 5]); // 5
+max([-3, -1, -4]); // -1
+max([]); // undefined
+```
+
 ## TypeScript Support
 
 This package is written in TypeScript and includes type definitions out of the box. No need to install separate `@types` packages.
 
 ```typescript
-import { capitalize, clamp } from '@edgarimai/utils';
+import { capitalize, clamp, unique } from '@edgarimai/utils';
 
 const name: string = capitalize('john'); // Type-safe
 const value: number = clamp(10, 0, 5); // Type-safe
+const arr: number[] = unique([1, 2, 2, 3]); // Type-safe
 ```
 
 ## Tree-shaking Benefits
@@ -331,6 +548,9 @@ import { capitalize, slugify } from '@edgarimai/utils/string';
 
 // ✅ Only includes clamp and round
 import { clamp, round } from '@edgarimai/utils/number';
+
+// ✅ Only includes unique and chunk
+import { unique, chunk } from '@edgarimai/utils/array';
 ```
 
 This results in smaller bundle sizes for your application.
