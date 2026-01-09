@@ -5,6 +5,9 @@
  * @example capitalize('hello') // 'Hello'
  */
 export function capitalize(str: string): string {
+  if (typeof str !== 'string')
+    throw new TypeError('capitalize: str must be a string');
+
   if (!str) return str;
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -16,6 +19,9 @@ export function capitalize(str: string): string {
  * @example capitalizeWords('hello world') // 'Hello World'
  */
 export function capitalizeWords(str: string): string {
+  if (typeof str !== 'string')
+    throw new TypeError('capitalizeWords: str must be a string');
+
   if (!str) return str;
   return str.replace(/\b\w/g, (char) => char.toUpperCase());
 }
@@ -27,6 +33,9 @@ export function capitalizeWords(str: string): string {
  * @example camelCase('hello-world') // 'helloWorld'
  */
 export function camelCase(str: string): string {
+  if (typeof str !== 'string')
+    throw new TypeError('camelCase: str must be a string');
+
   if (!str) return str;
   return str
     .toLowerCase()
@@ -40,6 +49,9 @@ export function camelCase(str: string): string {
  * @example kebabCase('helloWorld') // 'hello-world'
  */
 export function kebabCase(str: string): string {
+  if (typeof str !== 'string')
+    throw new TypeError('kebabCase: str must be a string');
+
   if (!str) return str;
   return str
     .replace(/([a-z])([A-Z])/g, '$1-$2')
@@ -54,6 +66,9 @@ export function kebabCase(str: string): string {
  * @example snakeCase('helloWorld') // 'hello_world'
  */
 export function snakeCase(str: string): string {
+  if (typeof str !== 'string')
+    throw new TypeError('snakeCase: str must be a string');
+
   if (!str) return str;
   return str
     .replace(/([a-z])([A-Z])/g, '$1_$2')
@@ -70,6 +85,15 @@ export function snakeCase(str: string): string {
  * @example truncate('hello world', 8) // 'hello...'
  */
 export function truncate(str: string, length: number, suffix = '...'): string {
+  if (typeof str !== 'string')
+    throw new TypeError('truncate: str must be a string');
+
+  if (!Number.isInteger(length) || length < 0)
+    throw new TypeError('truncate: length must be a non-negative integer');
+
+  if (typeof suffix !== 'string')
+    throw new TypeError('truncate: suffix must be a string');
+
   if (!str || str.length <= length) return str;
   return str.slice(0, length - suffix.length) + suffix;
 }
@@ -81,6 +105,9 @@ export function truncate(str: string, length: number, suffix = '...'): string {
  * @example slugify('Hello World!') // 'hello-world'
  */
 export function slugify(str: string): string {
+  if (typeof str !== 'string')
+    throw new TypeError('slugify: str must be a string');
+
   if (!str) return str;
   return str
     .toLowerCase()
@@ -97,6 +124,9 @@ export function slugify(str: string): string {
  * @example reverse('hello') // 'olleh'
  */
 export function reverse(str: string): string {
+  if (typeof str !== 'string')
+    throw new TypeError('reverse: str must be a string');
+
   if (!str) return str;
   return str.split('').reverse().join('');
 }
@@ -108,6 +138,9 @@ export function reverse(str: string): string {
  * @example removeWhitespace('hello world') // 'helloworld'
  */
 export function removeWhitespace(str: string): string {
+  if (typeof str !== 'string')
+    throw new TypeError('removeWhitespace: str must be a string');
+
   if (!str) return str;
   return str.replace(/\s+/g, '');
 }
@@ -119,6 +152,9 @@ export function removeWhitespace(str: string): string {
  * @example countWords('hello world') // 2
  */
 export function countWords(str: string): number {
+  if (typeof str !== 'string')
+    throw new TypeError('countWords: str must be a string');
+
   if (!str) return 0;
   return str.trim().split(/\s+/).filter(Boolean).length;
 }
