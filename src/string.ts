@@ -159,3 +159,32 @@ export function countWords(str: string): number {
   return str.trim().split(/\s+/).filter(Boolean).length;
 }
 
+/**
+ * Removes mask characters from a string
+ * @param str - The masked string to process
+ * @param mask - Optional custom mask characters to remove (default: removes common mask characters like spaces, dashes, parentheses, dots, slashes)
+ * @returns The string without mask characters
+ * @example removeMask('(123) 456-7890') // '1234567890'
+ * @example removeMask('123-45-6789') // '123456789'
+ * @example removeMask('12/31/2024') // '12312024'
+ * @example removeMask('1234-5678-9012-3456') // '1234567890123456'
+ * @example removeMask('ABC-123', '-') // 'ABC123'
+ */
+export function removeMask(str: string, mask?: string): string {
+  if (typeof str !== 'string')
+    throw new TypeError('removeMask: str must be a string');
+
+  if (mask !== undefined && typeof mask !== 'string')
+    throw new TypeError('removeMask: mask must be a string');
+
+  if (!str) return str;
+
+  if (mask) {
+    const escapedMask = mask.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp(`[${escapedMask}]`, 'g');
+    return str.replace(pattern, '');
+  }
+
+  return str.replace(/[\s\-().\/\\]/g, '');
+}
+

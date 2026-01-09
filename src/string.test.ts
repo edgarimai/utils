@@ -10,6 +10,7 @@ import {
   reverse,
   removeWhitespace,
   countWords,
+  removeMask,
 } from './string.js';
 
 describe('capitalize', () => {
@@ -249,6 +250,64 @@ describe('countWords', () => {
 
   it('should handle many words', () => {
     expect(countWords('the quick brown fox jumps')).toBe(5);
+  });
+});
+
+describe('removeMask', () => {
+  it('should remove phone number mask', () => {
+    expect(removeMask('(123) 456-7890')).toBe('1234567890');
+  });
+
+  it('should remove SSN mask', () => {
+    expect(removeMask('123-45-6789')).toBe('123456789');
+  });
+
+  it('should remove date mask with slashes', () => {
+    expect(removeMask('12/31/2024')).toBe('12312024');
+  });
+
+  it('should remove credit card mask', () => {
+    expect(removeMask('1234-5678-9012-3456')).toBe('1234567890123456');
+  });
+
+  it('should remove backslashes', () => {
+    expect(removeMask('123\\456\\789')).toBe('123456789');
+  });
+
+  it('should handle empty string', () => {
+    expect(removeMask('')).toBe('');
+  });
+
+  it('should handle string without mask', () => {
+    expect(removeMask('1234567890')).toBe('1234567890');
+  });
+
+  it('should remove custom mask characters', () => {
+    expect(removeMask('ABC-123', '-')).toBe('ABC123');
+  });
+
+  it('should remove multiple custom mask characters', () => {
+    expect(removeMask('A*B*C-1-2-3', '*-')).toBe('ABC123');
+  });
+
+  it('should handle custom mask with special regex characters', () => {
+    expect(removeMask('test.file.name', '.')).toBe('testfilename');
+  });
+
+  it('should preserve letters with default mask', () => {
+    expect(removeMask('ABC-123')).toBe('ABC123');
+  });
+
+  it('should handle mixed content', () => {
+    expect(removeMask('Apt. 5B')).toBe('Apt5B');
+  });
+
+  it('should throw error for non-string input', () => {
+    expect(() => removeMask(123 as any)).toThrow('removeMask: str must be a string');
+  });
+
+  it('should throw error for non-string mask', () => {
+    expect(() => removeMask('test', 123 as any)).toThrow('removeMask: mask must be a string');
   });
 });
 

@@ -9,6 +9,7 @@ export {
   reverse,
   removeWhitespace,
   countWords,
+  removeMask,
 } from './string.js';
 
 export {

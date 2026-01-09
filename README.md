@@ -167,6 +167,29 @@ countWords('the quick brown fox jumps'); // 5
 countWords('  hello   world  '); // 2
 ```
 
+#### `removeMask(str: string, mask?: string): string`
+
+Removes mask characters from a string. By default, removes common mask characters like spaces, dashes, parentheses, dots, and slashes. You can optionally specify custom characters to remove.
+
+```typescript
+import { removeMask } from '@edgarimai/utils/string';
+
+// Remove common mask characters (default behavior)
+removeMask('(123) 456-7890'); // '1234567890'
+removeMask('123-45-6789'); // '123456789'
+removeMask('12/31/2024'); // '12312024'
+removeMask('1234-5678-9012-3456'); // '1234567890123456'
+
+// Remove custom mask characters
+removeMask('ABC-123', '-'); // 'ABC123'
+removeMask('A*B*C-1-2-3', '*-'); // 'ABC123'
+removeMask('test.file.name', '.'); // 'testfilename'
+
+// Preserves letters and alphanumeric content
+removeMask('ABC-123'); // 'ABC123'
+removeMask('Apt. 5B'); // 'Apt5B'
+```
+
 ### Number Utilities
 
 #### `clamp(value: number, min: number, max: number): number`
