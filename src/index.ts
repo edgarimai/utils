@@ -9,6 +9,7 @@ export {
   reverse,
   removeWhitespace,
   countWords,
+  removeMask,
 } from './string.js';
 
 export {
@@ -23,3 +24,64 @@ export {
   sum,
   average,
 } from './number.js';
+
+export {
+  unique,
+  flatten,
+  chunk,
+  take,
+  drop,
+  shuffle,
+  sample,
+  intersection,
+  difference,
+  groupBy,
+  countBy,
+  sortBy,
+  partition,
+  zip,
+  compact,
+  takeLast,
+  min,
+  max,
+} from './array.js';
+
+export {
+  pick,
+  omit,
+  merge,
+  clone,
+  get,
+  set,
+  isEmpty,
+  isEqual,
+  mapValues,
+  keys,
+  values,
+  entries,
+} from './object.js';
+
+export {
+  format,
+  addDays,
+  addMonths,
+  addYears,
+  addHours,
+  addMinutes,
+  isBefore,
+  isAfter,
+  isSameDay,
+  diffInDays,
+  diffInHours,
+  diffInMinutes,
+  startOfDay,
+  endOfDay,
+  startOfMonth,
+  endOfMonth,
+  isValid,
+  isWeekend,
+  formatRelative,
+  getWeekdayName,
+  getMonthName,
+  timestamp,
+} from './date.js';

@@ -7,6 +7,18 @@
  * @example clamp(10, 0, 5) // 5
  */
 export function clamp(value: number, min: number, max: number): number {
+  if (!Number.isFinite(value)) {
+    throw new TypeError('clamp: value must be a finite number');
+  }
+
+  if (!Number.isFinite(min) || !Number.isFinite(max)) {
+    throw new TypeError('clamp: min and max must be finite numbers');
+  }
+
+  if (min > max) {
+    throw new RangeError('clamp: min cannot be greater than max');
+  }
+
   return Math.min(Math.max(value, min), max);
 }
 
@@ -18,8 +30,16 @@ export function clamp(value: number, min: number, max: number): number {
  * @example round(3.14159, 2) // 3.14
  */
 export function round(value: number, decimals = 0): number {
-  const factor = Math.pow(10, decimals);
-  return Math.round(value * factor) / factor;
+  if (!Number.isFinite(value)) {
+    throw new Error('round: value must be a finite number');
+  }
+
+  if (!Number.isInteger(decimals) || decimals < 0) {
+    throw new Error('round: decimals must be a non-negative integer');
+  }
+
+  const factor = 10 ** decimals;
+  return Math.round((value + Number.EPSILON) * factor) / factor;
 }
 
 /**
@@ -30,6 +50,12 @@ export function round(value: number, decimals = 0): number {
  * @example randomInt(1, 10) // 7
  */
 export function randomInt(min: number, max: number): number {
+  if (!Number.isFinite(min) || !Number.isFinite(max))
+    throw new TypeError('randomInt: min and max must be finite numbers');
+
+  if (min > max)
+    throw new RangeError('randomInt: min cannot be greater than max');
+
   const minCeil = Math.ceil(min);
   const maxFloor = Math.floor(max);
   return Math.floor(Math.random() * (maxFloor - minCeil + 1)) + minCeil;
@@ -44,6 +70,15 @@ export function randomInt(min: number, max: number): number {
  * @example randomFloat(1, 10, 2) // 7.42
  */
 export function randomFloat(min: number, max: number, decimals = 2): number {
+  if (!Number.isFinite(min) || !Number.isFinite(max))
+    throw new TypeError('randomFloat: min and max must be finite numbers');
+
+  if (min > max)
+    throw new RangeError('randomFloat: min cannot be greater than max');
+
+  if (!Number.isInteger(decimals) || decimals < 0)
+    throw new Error('randomFloat: decimals must be a non-negative integer');
+
   const random = Math.random() * (max - min) + min;
   return round(random, decimals);
 }
@@ -57,6 +92,12 @@ export function randomFloat(min: number, max: number, decimals = 2): number {
  * @example percentage(25, 100) // 25
  */
 export function percentage(value: number, total: number, decimals = 2): number {
+  if (!Number.isFinite(value) || !Number.isFinite(total))
+    throw new TypeError('percentage: value and total must be finite numbers');
+
+  if (!Number.isInteger(decimals) || decimals < 0)
+    throw new Error('percentage: decimals must be a non-negative integer');
+
   if (total === 0) return 0;
   return round((value / total) * 100, decimals);
 }
@@ -74,6 +115,9 @@ export function formatCurrency(
   currency = 'USD',
   locale = 'en-US'
 ): string {
+  if (!Number.isFinite(value))
+    throw new TypeError('formatCurrency: value must be a finite number');
+
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
@@ -87,6 +131,12 @@ export function formatCurrency(
  * @example isEven(4) // true
  */
 export function isEven(value: number): boolean {
+  if (!Number.isFinite(value))
+    throw new TypeError('isEven: value must be a finite number');
+
+  if (!Number.isInteger(value))
+    throw new TypeError('isEven: value must be an integer');
+
   return value % 2 === 0;
 }
 
@@ -97,6 +147,12 @@ export function isEven(value: number): boolean {
  * @example isOdd(3) // true
  */
 export function isOdd(value: number): boolean {
+  if (!Number.isFinite(value))
+    throw new TypeError('isOdd: value must be a finite number');
+
+  if (!Number.isInteger(value))
+    throw new TypeError('isOdd: value must be an integer');
+
   return value % 2 !== 0;
 }
 
@@ -107,6 +163,12 @@ export function isOdd(value: number): boolean {
  * @example sum([1, 2, 3, 4]) // 10
  */
 export function sum(numbers: number[]): number {
+  if (!Array.isArray(numbers))
+    throw new TypeError('sum: numbers must be an array');
+
+  if (numbers.some(num => !Number.isFinite(num)))
+    throw new TypeError('sum: all elements must be finite numbers');
+
   return numbers.reduce((acc, num) => acc + num, 0);
 }
 
@@ -117,6 +179,9 @@ export function sum(numbers: number[]): number {
  * @example average([1, 2, 3, 4]) // 2.5
  */
 export function average(numbers: number[]): number {
+  if (!Array.isArray(numbers))
+    throw new TypeError('average: numbers must be an array');
+
   if (numbers.length === 0) return 0;
   return sum(numbers) / numbers.length;
 }

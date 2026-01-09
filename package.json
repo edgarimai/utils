@@ -1,6 +1,6 @@
 {
   "name": "@edgarimai/utils",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -34,6 +34,36 @@
         "types": "./dist/number.d.cts",
         "default": "./dist/number.cjs"
       }
+    },
+    "./array": {
+      "import": {
+        "types": "./dist/array.d.ts",
+        "default": "./dist/array.mjs"
+      },
+      "require": {
+        "types": "./dist/array.d.cts",
+        "default": "./dist/array.cjs"
+      }
+    },
+    "./object": {
+      "import": {
+        "types": "./dist/object.d.ts",
+        "default": "./dist/object.mjs"
+      },
+      "require": {
+        "types": "./dist/object.d.cts",
+        "default": "./dist/object.cjs"
+      }
+    },
+    "./date": {
+      "import": {
+        "types": "./dist/date.d.ts",
+        "default": "./dist/date.mjs"
+      },
+      "require": {
+        "types": "./dist/date.d.cts",
+        "default": "./dist/date.cjs"
+      }
     }
   },
   "files": [
@@ -51,6 +81,9 @@
     "helpers",
     "string",
     "number",
+    "array",
+    "object",
+    "date",
     "typescript",
     "tree-shaking"
   ],
