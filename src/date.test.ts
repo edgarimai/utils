@@ -21,6 +21,7 @@ import {
   formatRelative,
   getWeekdayName,
   getMonthName,
+  timestamp,
 } from './date.js';
 
 describe('format', () => {
@@ -617,5 +618,59 @@ describe('getMonthName', () => {
     expect(getMonthName(date, 'long', 'en-US', 'Asia/Tokyo')).toBe('February');
     // In LA (UTC-8), it's still January 31st
     expect(getMonthName(date, 'long', 'en-US', 'America/Los_Angeles')).toBe('January');
+  });
+});
+
+describe('timestamp', () => {
+  it('should return unix timestamp by default', () => {
+    const date = new Date('2026-01-09T12:00:00.000Z');
+    const result = timestamp(date);
+    expect(typeof result).toBe('number');
+    expect(result).toBe(1767960000); // Unix timestamp for 2026-01-09T12:00:00.000Z
+  });
+
+  it('should return unix timestamp for current time when no date provided', () => {
+    const before = Math.floor(Date.now() / 1000);
+    const result = timestamp();
+    const after = Math.floor(Date.now() / 1000);
+    expect(typeof result).toBe('number');
+    expect(result).toBeGreaterThanOrEqual(before);
+    expect(result).toBeLessThanOrEqual(after);
+  });
+
+  it('should return iso string when format is iso', () => {
+    const date = new Date('2026-01-09T12:30:45.123Z');
+    const result = timestamp(date, 'iso');
+    expect(typeof result).toBe('string');
+    expect(result).toBe('2026-01-09T12:30:45.123Z');
+  });
+
+  it('should return milliseconds when format is milliseconds', () => {
+    const date = new Date('2026-01-09T12:00:00.000Z');
+    const result = timestamp(date, 'milliseconds');
+    expect(typeof result).toBe('number');
+    expect(result).toBe(1767960000000); // Milliseconds timestamp for 2026-01-09T12:00:00.000Z
+  });
+
+  it('should throw error for invalid date', () => {
+    expect(() => timestamp(new Date('invalid'))).toThrow('timestamp: date must be a valid Date');
+  });
+
+  it('should return custom format when format is a string pattern', () => {
+    const date = new Date('2026-01-09T15:30:45.000Z');
+    const result = timestamp(date, 'YYYYMMDDHHmmss');
+    expect(typeof result).toBe('string');
+    expect(result).toBe('20260109153045');
+  });
+
+  it('should return custom format with separators', () => {
+    const date = new Date('2026-01-09T15:30:45.000Z');
+    const result = timestamp(date, 'YYYY-MM-DD HH:mm:ss');
+    expect(typeof result).toBe('string');
+    expect(result).toBe('2026-01-09 15:30:45');
+  });
+
+  it('should throw error for invalid date', () => {
+    expect(() => timestamp(new Date('invalid'))).toThrow('timestamp: date must be a valid Date');
   });
 });

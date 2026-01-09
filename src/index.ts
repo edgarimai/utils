@@ -83,4 +83,5 @@ export {
   formatRelative,
   getWeekdayName,
   getMonthName,
+  timestamp,
 } from './date.js';

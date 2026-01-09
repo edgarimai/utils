@@ -949,6 +949,34 @@ getMonthName(new Date('2026-01-01'), 'long', 'en-US', 'UTC');
 // 'January' (always uses month in UTC)
 ```
 
+#### `timestamp(date?: Date, format?: 'unix' | 'iso' | 'milliseconds' | string): string | number`
+
+Creates a timestamp from a date or current time in various formats.
+
+```typescript
+import { timestamp } from '@edgarimai/utils/date';
+
+// Unix timestamp (default)
+timestamp(); // 1704825600 (current unix timestamp)
+timestamp(new Date('2026-01-09')); // 1704758400
+
+// ISO string
+timestamp(new Date('2026-01-09'), 'iso');
+// '2026-01-09T00:00:00.000Z'
+
+// Milliseconds since epoch
+timestamp(new Date('2026-01-09'), 'milliseconds');
+// 1704758400000
+
+// Custom compact format
+timestamp(new Date('2026-01-09 15:30:45'), 'YYYYMMDDHHmmss');
+// '20260109153045'
+
+// Custom format with separators
+timestamp(new Date('2026-01-09'), 'YYYY-MM-DD HH:mm:ss');
+// '2026-01-09 00:00:00'
+```
+
 ## TypeScript Support
 
 This package is written in TypeScript and includes type definitions out of the box. No need to install separate `@types` packages.

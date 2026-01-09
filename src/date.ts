@@ -440,3 +440,48 @@ export function getMonthName(
 
   return new Intl.DateTimeFormat(locale, options).format(date);
 }
+
+/**
+ * Creates a timestamp from a date or current time
+ * @param date - The date to create timestamp from (default: now)
+ * @param format - The timestamp format: 'unix', 'iso', 'milliseconds', or a custom format string (default: 'unix')
+ * @returns The timestamp in the specified format
+ * @example timestamp() // 1704825600 (current unix timestamp)
+ * @example timestamp(new Date('2026-01-09'), 'iso') // '2026-01-09T12:00:00.000Z'
+ * @example timestamp(new Date('2026-01-09'), 'milliseconds') // 1704825600000
+ * @example timestamp(new Date('2026-01-09 15:30:45'), 'YYYYMMDDHHmmss') // '20260109153045'
+ * @example timestamp(new Date('2026-01-09'), 'YYYY-MM-DD HH:mm:ss') // '2026-01-09 00:00:00'
+ */
+export function timestamp(
+  date: Date = new Date(),
+  format: 'unix' | 'iso' | 'milliseconds' | string = 'unix'
+): string | number {
+  if (!(date instanceof Date) || isNaN(date.getTime()))
+    throw new TypeError('timestamp: date must be a valid Date');
+
+  // If format is a predefined string format, handle it directly
+  switch (format) {
+    case 'unix':
+      return Math.floor(date.getTime() / 1000);
+    case 'iso':
+      return date.toISOString();
+    case 'milliseconds':
+      return date.getTime();
+  }
+
+  // If format is a custom string pattern, apply manual replacement
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const hours = String(date.getUTCHours()).padStart(2, '0');
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+
+  return format
+    .replace('YYYY', String(year))
+    .replace('MM', month)
+    .replace('DD', day)
+    .replace('HH', hours)
+    .replace('mm', minutes)
+    .replace('ss', seconds);
+}
