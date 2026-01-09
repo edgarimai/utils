@@ -54,6 +54,16 @@
         "types": "./dist/object.d.cts",
         "default": "./dist/object.cjs"
       }
+    },
+    "./date": {
+      "import": {
+        "types": "./dist/date.d.ts",
+        "default": "./dist/date.mjs"
+      },
+      "require": {
+        "types": "./dist/date.d.cts",
+        "default": "./dist/date.cjs"
+      }
     }
   },
   "files": [
@@ -73,6 +83,7 @@
     "number",
     "array",
     "object",
+    "date",
     "typescript",
     "tree-shaking"
   ],

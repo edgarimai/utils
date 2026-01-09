@@ -1,6 +1,6 @@
 # @edgarimai/utils
 
-A lightweight, tree-shakeable utility library for TypeScript and JavaScript. Simple, well-tested utilities for common tasks like string manipulation, number operations, array transformations, object operations, and more.
+A lightweight, tree-shakeable utility library for TypeScript and JavaScript. Simple, well-tested utilities for common tasks like string manipulation, number operations, array transformations, object operations, date handling, and more.
 
 ## Features
 
@@ -43,6 +43,9 @@ import { unique, chunk } from '@edgarimai/utils/array';
 
 // Import only object utilities
 import { pick, merge } from '@edgarimai/utils/object';
+
+// Import only date utilities
+import { format, addDays } from '@edgarimai/utils/date';
 ```
 
 ### Option 2: Main Entry (Convenience)
@@ -678,17 +681,286 @@ entries({ a: 1, b: 2 }); // [['a', 1], ['b', 2]]
 // Type-safe: keys and values are properly typed
 ```
 
+### Date Utilities
+
+#### `format(date: Date, pattern: string | Intl.DateTimeFormatOptions, locale?: string): string`
+
+Formats a date using Intl.DateTimeFormat or common string patterns.
+
+```typescript
+import { format } from '@edgarimai/utils/date';
+
+// String patterns (common formats)
+format(new Date('2026-01-09'), 'DD/MM/YYYY'); // '09/01/2026'
+format(new Date('2026-01-09'), 'YYYY-MM-DD'); // '2026-01-09'
+format(new Date('2026-01-09 10:30:45'), 'YYYY-MM-DD HH:mm:ss'); 
+// '2026-01-09 10:30:45'
+
+// Intl options (more powerful)
+format(new Date('2026-01-09'), { dateStyle: 'short' }); // '09/01/2026'
+format(new Date('2026-01-09'), { dateStyle: 'long' }); // 'January 9, 2026'
+format(new Date('2026-01-09'), { dateStyle: 'full' }); 
+// 'Friday, January 9, 2026'
+
+// Different locales
+format(new Date('2026-01-09'), { dateStyle: 'long' }, 'en-US'); 
+// 'January 9, 2026'
+```
+
+#### `addDays(date: Date, days: number): Date`
+
+Adds or subtracts days from a date. Uses UTC to avoid timezone issues.
+
+```typescript
+import { addDays } from '@edgarimai/utils/date';
+
+addDays(new Date('2026-01-09'), 7); // 2026-01-16
+addDays(new Date('2026-01-09'), -7); // 2026-01-02
+```
+
+#### `addMonths(date: Date, months: number): Date`
+
+Adds or subtracts months from a date.
+
+```typescript
+import { addMonths } from '@edgarimai/utils/date';
+
+addMonths(new Date('2026-01-09'), 3); // 2026-04-09
+addMonths(new Date('2026-04-09'), -3); // 2026-01-09
+```
+
+#### `addYears(date: Date, years: number): Date`
+
+Adds or subtracts years from a date.
+
+```typescript
+import { addYears } from '@edgarimai/utils/date';
+
+addYears(new Date('2026-01-09'), 1); // 2027-01-09
+addYears(new Date('2026-01-09'), -1); // 2025-01-09
+```
+
+#### `addHours(date: Date, hours: number): Date`
+
+Adds or subtracts hours from a date.
+
+```typescript
+import { addHours } from '@edgarimai/utils/date';
+
+addHours(new Date('2026-01-09 10:00'), 2); // 2026-01-09 12:00
+addHours(new Date('2026-01-09 10:00'), -2); // 2026-01-09 08:00
+```
+
+#### `addMinutes(date: Date, minutes: number): Date`
+
+Adds or subtracts minutes from a date.
+
+```typescript
+import { addMinutes } from '@edgarimai/utils/date';
+
+addMinutes(new Date('2026-01-09 10:00'), 30); // 2026-01-09 10:30
+addMinutes(new Date('2026-01-09 10:30'), -30); // 2026-01-09 10:00
+```
+
+#### `isBefore(date1: Date, date2: Date): boolean`
+
+Checks if date1 is before date2.
+
+```typescript
+import { isBefore } from '@edgarimai/utils/date';
+
+isBefore(new Date('2026-01-01'), new Date('2026-12-31')); // true
+isBefore(new Date('2026-12-31'), new Date('2026-01-01')); // false
+```
+
+#### `isAfter(date1: Date, date2: Date): boolean`
+
+Checks if date1 is after date2.
+
+```typescript
+import { isAfter } from '@edgarimai/utils/date';
+
+isAfter(new Date('2026-12-31'), new Date('2026-01-01')); // true
+isAfter(new Date('2026-01-01'), new Date('2026-12-31')); // false
+```
+
+#### `isSameDay(date1: Date, date2: Date): boolean`
+
+Checks if two dates are on the same day. Uses UTC to avoid timezone issues.
+
+```typescript
+import { isSameDay } from '@edgarimai/utils/date';
+
+isSameDay(new Date('2026-01-09 10:00'), new Date('2026-01-09 20:00')); // true
+isSameDay(new Date('2026-01-09'), new Date('2026-01-10')); // false
+```
+
+#### `diffInDays(date1: Date, date2: Date): number`
+
+Calculates the difference in days between two dates. Uses UTC to avoid timezone issues.
+
+```typescript
+import { diffInDays } from '@edgarimai/utils/date';
+
+diffInDays(new Date('2026-01-10'), new Date('2026-01-01')); // 9
+diffInDays(new Date('2026-01-01'), new Date('2026-01-10')); // -9
+```
+
+#### `diffInHours(date1: Date, date2: Date): number`
+
+Calculates the difference in hours between two dates.
+
+```typescript
+import { diffInHours } from '@edgarimai/utils/date';
+
+diffInHours(new Date('2026-01-09 20:00'), new Date('2026-01-09 10:00')); // 10
+diffInHours(new Date('2026-01-09 10:00'), new Date('2026-01-09 20:00')); // -10
+```
+
+#### `diffInMinutes(date1: Date, date2: Date): number`
+
+Calculates the difference in minutes between two dates.
+
+```typescript
+import { diffInMinutes } from '@edgarimai/utils/date';
+
+diffInMinutes(new Date('2026-01-09 10:30'), new Date('2026-01-09 10:00')); // 30
+diffInMinutes(new Date('2026-01-09 10:00'), new Date('2026-01-09 10:30')); // -30
+```
+
+#### `startOfDay(date: Date): Date`
+
+Returns the start of the day (00:00:00).
+
+```typescript
+import { startOfDay } from '@edgarimai/utils/date';
+
+startOfDay(new Date('2026-01-09 15:30')); // 2026-01-09 00:00:00
+```
+
+#### `endOfDay(date: Date): Date`
+
+Returns the end of the day (23:59:59.999).
+
+```typescript
+import { endOfDay } from '@edgarimai/utils/date';
+
+endOfDay(new Date('2026-01-09 15:30')); // 2026-01-09 23:59:59.999
+```
+
+#### `startOfMonth(date: Date): Date`
+
+Returns the first day of the month.
+
+```typescript
+import { startOfMonth } from '@edgarimai/utils/date';
+
+startOfMonth(new Date('2026-01-15')); // 2026-01-01 00:00:00
+```
+
+#### `endOfMonth(date: Date): Date`
+
+Returns the last day of the month.
+
+```typescript
+import { endOfMonth } from '@edgarimai/utils/date';
+
+endOfMonth(new Date('2026-01-15')); // 2026-01-31 23:59:59.999
+endOfMonth(new Date('2026-02-15')); // 2026-02-28 23:59:59.999
+```
+
+#### `isValid(date: Date): boolean`
+
+Checks if a date is valid.
+
+```typescript
+import { isValid } from '@edgarimai/utils/date';
+
+isValid(new Date('2026-01-09')); // true
+isValid(new Date('invalid')); // false
+```
+
+#### `isWeekend(date: Date): boolean`
+
+Checks if a date is on a weekend (Saturday or Sunday). Uses UTC to avoid timezone issues.
+
+```typescript
+import { isWeekend } from '@edgarimai/utils/date';
+
+isWeekend(new Date('2026-01-10')); // true (Saturday in UTC)
+isWeekend(new Date('2026-01-09')); // false (Friday in UTC)
+```
+
+#### `formatRelative(date: Date, locale?: string): string`
+
+Formats a date relative to now using Intl.RelativeTimeFormat.
+
+```typescript
+import { formatRelative } from '@edgarimai/utils/date';
+
+formatRelative(new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)); // '2 days ago'
+formatRelative(new Date(Date.now() + 3 * 60 * 60 * 1000)); // 'in 3 hours'
+formatRelative(new Date(Date.now() - 5 * 1000)); // 'a few seconds ago'
+
+// Different locales (portuguese examples)
+formatRelative(new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), 'pt-BR');
+// 'há 2 dias'
+formatRelative(new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), 'pt-BR');
+// 'amanhã'
+```
+
+#### `getWeekdayName(date: Date, format?: 'long' | 'short' | 'narrow', locale?: string, timeZone?: string): string`
+
+Gets the weekday name from a date using Intl.DateTimeFormat.
+
+```typescript
+import { getWeekdayName } from '@edgarimai/utils/date';
+
+getWeekdayName(new Date('2026-01-09T12:00:00')); // 'Friday'
+getWeekdayName(new Date('2026-01-09'), 'short'); // 'Fri.'
+getWeekdayName(new Date('2026-01-09'), 'narrow'); // 'F'
+
+// Different locales
+getWeekdayName(new Date('2026-01-09'), 'long', 'pt-BR'); // 'sexta-feira'
+getWeekdayName(new Date('2026-01-10'), 'short', 'pt-BR'); // 'sáb.'
+
+// With timezone (useful for dates at midnight)
+getWeekdayName(new Date('2026-01-09'), 'long', 'en-US', 'UTC');
+// 'Friday' (always uses day 9 in UTC)
+```
+
+#### `getMonthName(date: Date, format?: 'long' | 'short' | 'narrow', locale?: string, timeZone?: string): string`
+
+Gets the month name from a date using Intl.DateTimeFormat.
+
+```typescript
+import { getMonthName } from '@edgarimai/utils/date';
+
+getMonthName(new Date('2026-01-09T12:00:00')); // 'January'
+getMonthName(new Date('2026-01-09'), 'short'); // 'Jan.'
+getMonthName(new Date('2026-01-09'), 'narrow'); // 'J'
+
+// Different locales
+getMonthName(new Date('2026-01-09'), 'long', 'pt-BR'); // 'janeiro'
+getMonthName(new Date('2026-12-25'), 'short', 'pt-BR'); // 'dez.'
+
+// With timezone (useful for dates at midnight)
+getMonthName(new Date('2026-01-01'), 'long', 'en-US', 'UTC');
+// 'January' (always uses month in UTC)
+```
+
 ## TypeScript Support
 
 This package is written in TypeScript and includes type definitions out of the box. No need to install separate `@types` packages.
 
 ```typescript
-import { capitalize, clamp, unique, pick } from '@edgarimai/utils';
+import { capitalize, clamp, unique, pick, format } from '@edgarimai/utils';
 
 const name: string = capitalize('john'); // Type-safe
 const value: number = clamp(10, 0, 5); // Type-safe
 const arr: number[] = unique([1, 2, 2, 3]); // Type-safe
 const obj = pick({ a: 1, b: 2 }, ['a']); // Type-safe: { a: number }
+const dateStr: string = format(new Date(), 'DD/MM/YYYY'); // Type-safe
 ```
 
 ## Tree-shaking Benefits
@@ -707,6 +979,9 @@ import { unique, chunk } from '@edgarimai/utils/array';
 
 // ✅ Only includes pick and merge
 import { pick, merge } from '@edgarimai/utils/object';
+
+// ✅ Only includes format and addDays
+import { format, addDays } from '@edgarimai/utils/date';
 ```
 
 This results in smaller bundle sizes for your application.

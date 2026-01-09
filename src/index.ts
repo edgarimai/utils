@@ -60,3 +60,27 @@ export {
   values,
   entries,
 } from './object.js';
+
+export {
+  format,
+  addDays,
+  addMonths,
+  addYears,
+  addHours,
+  addMinutes,
+  isBefore,
+  isAfter,
+  isSameDay,
+  diffInDays,
+  diffInHours,
+  diffInMinutes,
+  startOfDay,
+  endOfDay,
+  startOfMonth,
+  endOfMonth,
+  isValid,
+  isWeekend,
+  formatRelative,
+  getWeekdayName,
+  getMonthName,
+} from './date.js';
